@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>台灣真的不安全嗎？從治安數據看體感的落差</title>
+  <!-- 連結外部樣式檔 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 頂部進度條 -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- 滑鼠移到圖表時的提示框 -->
+  <div class="tooltip" id="tooltip"></div>
+
+  <main class="deck" id="deck">
+
+    <!-- ==================== 第 1 頁：封面 ==================== -->
+    <section class="slide active" data-title="封面">
+      <div class="cover-layout">
+        <div class="tag">數據專題報告 ｜ 互動簡報版</div>
+        <h1>台灣真的<br><span class="highlight">不安全嗎？</span></h1>
+        <p class="subtitle">從治安數據看體感的落差</p>
+        <div class="meta-row">
+          <div class="author-badge">報告者：許雅婷</div>
+          <button class="btn-primary" onclick="nextSlide()">開始簡報 →</button>
+        </div>
+        <p class="hint">操作提示：可使用鍵盤方向鍵（← / →）或空白鍵翻頁，滑鼠移至圖表可檢視詳細數據。</p>
+      </div>
+      <div class="accent-triangle"></div>
+    </section>
+
+    <!-- ==================== 第 2 頁：簡報目錄 ==================== -->
+    <section class="slide" data-title="目錄">
+      <div class="slide-header">
+        <h2>簡報目錄</h2>
+        <p>點擊任一章節卡片，可直接跳轉至該主題頁面</p>
+      </div>
+      <div class="toc-grid">
+        <div class="toc-card" onclick="goToSlide(2)">
+          <span class="toc-num">01</span>
+          <div>
+            <h3>體感現狀與研究動機</h3>
+            <p>媒體曝光效應與 Google 搜尋熱度尖峰</p>
+          </div>
+        </div>
+        <div class="toc-card" onclick="goToSlide(3)">
+          <span class="toc-num">02</span>
+          <div>
+            <h3>台灣近十年暴力犯罪趨勢</h3>
+            <p>2015–2025 年發生數與破獲數變化</p>
+          </div>
+        </div>
+        <div class="toc-card" onclick="goToSlide(4)">
+          <span class="toc-num">03</span>
+          <div>
+            <h3>台灣近十年故意殺人趨勢</h3>
+            <p>2015–2025 年重大命案發生與偵破</p>
+          </div>
+        </div>
+        <div class="toc-card" onclick="goToSlide(5)">
+          <span class="toc-num">04</span>
+          <div>
+            <h3>故意殺人佔暴力犯罪比重</h3>
+            <p>拆解「分母縮小效應」造成的比例上升</p>
+          </div>
+        </div>
+        <div class="toc-card" onclick="goToSlide(6)">
+          <span class="toc-num">05</span>
+          <div>
+            <h3>故意殺人被害人兩造關係</h3>
+            <p>陌生人隨機攻擊 vs. 熟識關係衝突</p>
+          </div>
+        </div>
+        <div class="toc-card" onclick="goToSlide(7)">
+          <span class="toc-num">06</span>
+          <div>
+            <h3>性別視角下的風險結構</h3>
+            <p>女性與男性被害者的關係與案發場域對比</p>
+          </div>
+        </div>
+        <div class="toc-card toc-wide" onclick="goToSlide(8)">
+          <span class="toc-num">07</span>
+          <div>
+            <h3>核心結論與行動反思</h3>
+            <p>建構社會安全網與個人防護力</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 第 3 頁：01 體感現狀 ==================== -->
+    <section class="slide" data-title="01 體感現狀">
+      <div class="slide-header">
+        <div class="chapter-tag">CHAPTER 01</div>
+        <h2>我們體感中的<span class="highlight">不安全感</span></h2>
+      </div>
+      <div class="two-col">
+        <div class="info-stack">
+          <div class="info-card">
+            <h4>街頭隨機攻擊的焦慮</h4>
+            <p>大眾常感覺出門在外隨時可能遭遇陌生人攻擊，對公共空間產生高度戒心。</p>
+          </div>
+          <div class="info-card">
+            <h4>媒體反覆報導的放大效應</h4>
+            <p>重大社會新聞在短時間內高密度推播，容易讓「極端罕見事件」在腦中顯得無所不在（可得性捷思）。</p>
+          </div>
+          <div class="info-card highlight-border">
+            <h4>核心研究問題</h4>
+            <p>我們的「體感治安」與警政署長期追蹤的「客觀犯罪數據」之間，究竟存在多大的落差？</p>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-title-bar">
+            <span>Google Trends「隨機殺人」搜尋熱度趨勢（示意）</span>
+            <span class="badge-orange">事件驅動型尖峰</span>
+          </div>
+          <div id="trendsChart" class="chart-box"></div>
+          <p class="source-note">觀察：搜尋熱度僅在單一重大事件發生時瞬間衝高，隨後迅速回落，反映輿論恐慌受新聞事件高度牽動。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 第 4 頁：02 暴力犯罪十年趨勢 ==================== -->
+    <section class="slide" data-title="02 暴力犯罪">
+      <div class="slide-header">
+        <div class="chapter-tag">CHAPTER 02</div>
+        <h2>台灣近十年暴力犯罪案件趨勢（2015–2025）</h2>
+        <p>涵蓋故意殺人、擄人勒贖、強盜、搶奪、強制性交、重大恐嚇取財及重傷害等七大類</p>
+      </div>
+      <div class="chart-panel full-panel">
+        <div class="chart-title-bar">
+          <span>發生數 vs. 破獲數（件）</span>
+          <div class="legend">
+            <span><i class="dot blue"></i>發生數</span>
+            <span><i class="dot orange"></i>破獲數</span>
+          </div>
+        </div>
+        <div id="violentChart" class="chart-box"></div>
+        <div class="bottom-strip">
+          <span>資料來源：內政部警政署《公務統計報表》及《警政統計通報》（註：2024 年 9 月起改採「1 被害人 1 發生數」統計新制）</span>
+          <span class="stat-pill">2015 → 2025 降幅達 <strong>-74.3%</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 第 5 頁：03 故意殺人十年趨勢 ==================== -->
+    <section class="slide" data-title="03 故意殺人">
+      <div class="slide-header">
+        <div class="chapter-tag">CHAPTER 03</div>
+        <h2>台灣近十年故意殺人案件趨勢（2015–2025）</h2>
+        <p>重大生命侵害案件長期呈階梯式下降，且破獲數常年接近發生數</p>
+      </div>
+      <div class="chart-panel full-panel">
+        <div class="chart-title-bar">
+          <span>故意殺人發生數 vs. 破獲數（件）</span>
+          <div class="legend">
+            <span><i class="dot blue"></i>發生數</span>
+            <span><i class="dot orange"></i>破獲數</span>
+          </div>
+        </div>
+        <div id="homicideChart" class="chart-box"></div>
+        <div class="bottom-strip">
+          <span>資料來源：內政部警政署《公務統計報表》及《警政統計通報》（2024/09 起統計改制影響 2025 全年基數）</span>
+          <span class="stat-pill">2015 → 2025 降幅達 <strong>-64.3%</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 第 6 頁：04 比重趨勢 ==================== -->
+    <section class="slide" data-title="04 比重趨勢">
+      <div class="slide-header">
+        <div class="chapter-tag">CHAPTER 04</div>
+        <h2>故意殺人佔整體暴力犯罪比重趨勢（2015–2025）</h2>
+        <p>為什麼命案總數明明大幅減少，佔整體暴力犯罪的「比例」反而上升？</p>
+      </div>
+      <div class="two-col ratio-layout">
+        <div class="chart-panel">
+          <div class="chart-title-bar">
+            <span>故意殺人佔暴力犯罪比重（%）</span>
+            <span class="badge-red">2024 年達 36.40%</span>
+          </div>
+          <div id="ratioChart" class="chart-box"></div>
+        </div>
+        <div class="info-stack">
+          <div class="math-card">
+            <h3>分母縮小效應</h3>
+            <div class="math-row">
+              <span>分母（整體暴力犯罪）</span>
+              <strong class="text-blue">-74.3%</strong>
+            </div>
+            <div class="math-row">
+              <span>分子（故意殺人案件）</span>
+              <strong class="text-orange">-64.3%</strong>
+            </div>
+          </div>
+          <div class="info-card">
+            <h4>解讀關鍵</h4>
+            <p>比重上升反映的是<strong>「其他六類暴力犯罪大幅減少」</strong>，並非殺人案件變多。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 第 7 頁：05 兩造關係分布 ==================== -->
+    <section class="slide" data-title="05 兩造關係">
+      <div class="slide-header">
+        <div class="chapter-tag">CHAPTER 05</div>
+        <h2>致命威脅其實來自<span class="highlight">熟人？</span></h2>
+        <p>資料來源：內政部警政署刑事警察局《犯罪被害概況》（最新完整年度兩造關係統計至 2023 年）</p>
+      </div>
+      <div class="two-col">
+        <div class="info-stack">
+          <div class="big-stat-card">
+            <span class="big-label">2023 年被害人與嫌犯「彼此認識」比例</span>
+            <div class="big-number">79.17%</div>
+            <p>2023 年共 96 名被害人中，<strong>76 人與嫌犯彼此認識</strong>，陌生人僅 20 人（20.83%）。</p>
+          </div>
+          <div class="info-card">
+            <h4>熟人比例逐年集中</h4>
+            <p>彼此認識的比例從 2019 年的 <strong>71.19%</strong> 上升至 2023 年的 <strong>79.17%</strong>，顯示人際與親密關係衝突才是核心風險。</p>
+          </div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-title-bar">
+            <span>故意殺人被害人兩造關係分布（2019–2023 人數）</span>
+            <div class="legend">
+              <span><i class="dot red"></i>認識</span>
+              <span><i class="dot gray"></i>不認識</span>
+            </div>
+          </div>
+          <div id="relationChart" class="chart-box"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 第 8 頁：06 性別視角互動切換 ==================== -->
+    <section class="slide" data-title="06 性別視角">
+      <div class="slide-header header-with-toggle">
+        <div>
+          <div class="chapter-tag">CHAPTER 06</div>
+          <h2>「性別視角」拆解故意殺人的風險結構</h2>
+          <p>點擊右側按鈕，切換檢視女性與男性被害者的「兩造關係」與「案發地點」對比（2019–2023）</p>
+        </div>
+        <div class="gender-switch">
+          <button id="btnFemale" class="switch-btn active" onclick="switchGender('female')">女性被害者</button>
+          <button id="btnMale" class="switch-btn" onclick="switchGender('male')">男性被害者</button>
+        </div>
+      </div>
+      <div class="gender-grid">
+        <div class="chart-panel">
+          <div class="chart-title-bar">
+            <span id="genderRelTitle">女性被害者：兩造關係佔比（%）</span>
+            <div class="legend">
+              <span><i class="dot" id="dotRelKnown"></i>認識</span>
+              <span><i class="dot gray"></i>不認識</span>
+            </div>
+          </div>
+          <div id="genderRelChart" class="chart-box"></div>
+        </div>
+        <div class="chart-panel">
+          <div class="chart-title-bar">
+            <span id="genderLocTitle">女性被害者：案發地點佔比（%）</span>
+            <div class="legend">
+              <span><i class="dot yellow"></i>住宅</span>
+              <span><i class="dot gray"></i>非住宅</span>
+            </div>
+          </div>
+          <div id="genderLocChart" class="chart-box"></div>
+        </div>
+        <div class="insight-box" id="genderInsight">
+          <!-- 內容由 charts.js 動態切換 -->
+        </div>
+      </div>
+    </section>
+<!-- ==================== 第 9 頁：07 核心結論 ==================== -->
+    <section class="slide" data-title="07 核心結論">
+      <div class="slide-header" style="margin-bottom: 16px;">
+        <div class="chapter-tag">CHAPTER 07</div>
+        <h2>核心結論與行動反思</h2>
+        <p>建構社會安全網與個人防護力</p>
+      </div>
+      <div class="conclusion-grid" style="flex: none; height: auto; margin-bottom: 18px;">
+        <div class="con-card" style="padding: 20px 18px;">
+          <div class="con-num" style="margin-bottom: 8px;">01</div>
+          <h3 style="margin-bottom: 8px;">總量大幅下降</h3>
+          <p>近十年台灣暴力犯罪下降 <strong>74.3%</strong>、故意殺人下降 <strong>64.3%</strong>，整體社會客觀治安持續改善，並非日益惡化。</p>
+        </div>
+        <div class="con-card" style="padding: 20px 18px;">
+          <div class="con-num" style="margin-bottom: 8px;">02</div>
+          <h3 style="margin-bottom: 8px;">結構濃縮效應</h3>
+          <p>命案佔暴力犯罪比重升至 3 成以上，源於其他六類暴力犯罪銳減的「分母縮小效應」，解讀數據須留意 2024 年 9 月統計改制。</p>
+        </div>
+        <div class="con-card" style="padding: 20px 18px;">
+          <div class="con-num" style="margin-bottom: 8px;">03</div>
+          <h3 style="margin-bottom: 8px;">關係高度集中</h3>
+          <p>近 <strong>8 成</strong>命案發生在彼此認識的熟人或親密關係之間，陌生人隨機殺人僅屬極少數，媒體報導放大了民眾的體感恐懼。</p>
+        </div>
+        <div class="con-card" style="padding: 20px 18px;">
+          <div class="con-num" style="margin-bottom: 8px;">04</div>
+          <h3 style="margin-bottom: 8px;">性別風險分化</h3>
+          <p>女性被害者近年逾 8 成在「住宅內」遭熟人殺害；男性近年亦由非住宅外部衝突轉向住宅內熟人案件（2023 年住宅佔比達 65.67%）。顯示風險高度集中於親密關係與私領域。</p>
+        </div>
+      </div>
+
+      <!-- ==================== 具體防制方向（視窗高度 vh 自適應版：一般視窗不裁切＋全螢幕自動放大） ==================== -->
+      <div style="margin-top: clamp(2px, 1vh, 14px);">
+        <!-- 區塊主標題：依視窗高度自動縮放（非全螢幕約 20px，全螢幕放大至 28px） -->
+        <div style="color: #e86a24; font-size: clamp(1.25rem, 2.6vh, 1.85rem); font-weight: 700; margin-bottom: clamp(6px, 1.2vh, 14px);">
+          具體防制方向：
+        </div>
+
+        <!-- 建議內容卡片：字體、內距與行高全部改以視窗高度 (vh) 連動縮放 -->
+        <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: clamp(10px, 1.8vh, 22px) clamp(18px, 2vw, 28px); font-size: clamp(1.05rem, 2.2vh, 1.55rem); line-height: 1.55; color: #e2e8f0;">
+          <!-- 第一點：個人防護 -->
+          <p style="margin: 0 0 clamp(4px, 1vh, 12px) 0;">
+            <strong style="color: #ffffff;">個人防護：</strong>透過情感教育辨識精神控制（PUA）、參與社團建立社交連結、學習基礎防身自保。
+          </p>
+
+          <!-- 第二點：公部門協作 -->
+          <p style="margin: 0;">
+            <strong style="color: #ffffff;">公部門協作：</strong>強化警政與社福單位橫向合作，透過高風險家庭通報與早期介入，在悲劇發生前接住當事人。
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+  <footer class="nav-hud">
+    <div class="nav-pills" id="navPills"></div>
+    <div class="nav-actions">
+      <span id="pageIndicator">1 / 9</span>
+      <button class="nav-btn" onclick="prevSlide()" title="上一頁 (←)">◀</button>
+      <button class="nav-btn" onclick="nextSlide()" title="下一頁 (→)">▶</button>
+      <button class="nav-btn" onclick="toggleFullscreen()" title="全螢幕切換 (F)">⛶</button>
+    </div>
+  </footer>
+
+  <script src="charts.js"></script>
+</body>
+</html>
+  </main>
+
+  <footer class="nav-hud">
+    <div class="nav-pills" id="navPills"></div>
+    <div class="nav-actions">
+      <span id="pageIndicator">1 / 9</span>
+      <button class="nav-btn" onclick="prevSlide()" title="上一頁 (←)">◀</button>
+      <button class="nav-btn" onclick="nextSlide()" title="下一頁 (→)">▶</button>
+      <button class="nav-btn" onclick="toggleFullscreen()" title="全螢幕切換 (F)">⛶</button>
+    </div>
+  </footer>
+
+  <script src="charts.js"></script>
+</body>
+</html>
+
+

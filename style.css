@@ -1,0 +1,555 @@
+/* ==================== 1. 全域配色變數（想改顏色改這裡） ==================== */
+:root {
+  --bg-dark: #0F2537;
+  --bg-card: #16334B;
+  --bg-panel: #1D415E;
+  --accent-orange: #E86F3A;
+  --accent-orange-hover: #F58453;
+  --accent-blue: #3B82F6;
+  --accent-red: #EF4444;
+  --accent-yellow: #F59E0B;
+  --text-main: #F8FAFC;
+  --text-muted: #CBD5E1;
+  --border-subtle: rgba(255, 255, 255, 0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+}
+
+/* ==================== 2. 進度條與底部導覽列 ==================== */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0; height: 4px;
+  background: var(--accent-orange);
+  transition: width 0.35s ease;
+  z-index: 1000;
+}
+
+.nav-hud {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 54px;
+  background: rgba(11, 28, 42, 0.92);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 900;
+}
+
+.nav-pills { display: flex; gap: 6px; overflow-x: auto; }
+.nav-pill {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-pill:hover { color: #fff; background: rgba(255,255,255,0.08); }
+.nav-pill.active {
+  background: var(--accent-orange);
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+#pageIndicator { font-size: 13px; color: var(--text-muted); margin-right: 4px; }
+.nav-btn {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s;
+}
+.nav-btn:hover { background: var(--accent-orange); border-color: var(--accent-orange); }
+
+/* ==================== 3. 投影片主框架 ==================== */
+.deck {
+  width: 100vw;
+  height: calc(100vh - 54px);
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  padding: 36px 56px 28px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.highlight { color: var(--accent-orange); }
+
+/* ==================== 4. 封面頁樣式 ==================== */
+.cover-layout {
+  margin: auto 0;
+  max-width: 780px;
+  z-index: 2;
+}
+.tag {
+  display: inline-block;
+  background: var(--accent-orange);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+.cover-layout h1 {
+  font-size: clamp(42px, 5.5vw, 68px);
+  line-height: 1.15;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+.subtitle {
+  font-size: clamp(18px, 2vw, 23px);
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+.meta-row { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
+.author-badge {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.btn-primary {
+  background: var(--accent-orange);
+  color: #fff;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-primary:hover { background: var(--accent-orange-hover); transform: translateY(-2px); }
+.hint { font-size: 13px; color: #94A3B8; }
+
+.accent-triangle {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 38vw; height: 110px;
+  background: var(--accent-orange);
+  clip-path: polygon(0 25%, 100% 100%, 0% 100%);
+  opacity: 0.9;
+}
+
+/* ==================== 5. 內頁標題與目錄卡片元件 ==================== */
+/* 每一頁頂部的標題區塊外距 */
+.slide-header { margin-bottom: 18px; }
+/* 頂部橘色章節小標籤（例如 CHAPTER 01） */
+.chapter-tag {
+  color: var(--accent-orange);
+  font-size: clamp(14px, 1.1vw, 17px); /* 依螢幕寬度自動縮放的字體大小 */
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
+}
+/* 每一頁的主標題 */
+.slide-header h2 { font-size: clamp(28px, 3.4vw, 42px); font-weight: 800; margin-bottom: 6px; }
+/* 每一頁主標題下方的灰色副標題 */
+.slide-header p { color: var(--text-muted); font-size: clamp(18px, 1.5vw, 22px); }
+
+/* 第 2 頁簡報目錄：雙欄網格容器 */
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  flex: 1;
+}
+/* 目錄單張章節卡片 */
+.toc-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+/* 滑鼠移到目錄卡片時的互動發光效果 */
+.toc-card:hover {
+  background: var(--bg-panel);
+  border-color: var(--accent-orange);
+  transform: translateX(4px);
+}
+/* 目錄最後一張（07 核心結論）橫跨兩欄 */
+.toc-wide { grid-column: span 2; }
+/* 目錄卡片左側的橘色編號方塊 */
+.toc-num {
+  background: var(--accent-orange);
+  color: #fff;
+  font-weight: 800;
+  font-size: 22px;
+  width: 52px; height: 52px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+/* 目錄卡片標題與副標題 */
+.toc-card h3 { font-size: clamp(21px, 1.8vw, 26px); margin-bottom: 6px; }
+.toc-card p { font-size: clamp(16px, 1.3vw, 20px); color: var(--text-muted); }
+
+/* ==================== 6. 圖表面板與左右雙欄版面 ==================== */
+/* 通用左右雙欄版面（左卡片 1 份寬 : 右圖表 1.35 份寬） */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 24px;
+  flex: 1;
+  min-height: 0;
+}
+/* 第 04 章比重趨勢專用比例（左圖表 1.45 份寬 : 右卡片 1 份寬） */
+.ratio-layout { grid-template-columns: 1.45fr 1fr; }
+
+/* 左側多張文字卡片的垂直堆疊容器 */
+.info-stack { display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+/* 所有文字資訊卡片、數學分母卡片、大數字卡片的共用深藍底框 */
+.info-card, .math-card, .big-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+/* 強調重點卡片的左側橘色粗邊框 */
+.highlight-border { border-left: 4px solid var(--accent-orange); }
+/* 資訊卡片的橘色小標題與內文 */
+.info-card h4 { color: var(--accent-orange); font-size: clamp(21px, 1.7vw, 25px); margin-bottom: 8px; }
+.info-card p { font-size: clamp(18px, 1.45vw, 22px); line-height: 1.6; color: var(--text-muted); }
+
+/* 右側（或全幅）SVG 圖表外框面板 */
+.chart-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+/* 單張全幅圖表專用（第 02、03 章） */
+.full-panel { flex: 1; }
+/* 圖表面板頂部的標題與圖例列 */
+.chart-title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: clamp(17px, 1.4vw, 21px);
+  font-weight: 700;
+}
+/* 圖表實際繪製區域 */
+.chart-box { flex: 1; width: 100%; min-height: 0; position: relative; }
+/* 圖表下方的資料來源說明文字 */
+.source-note { font-size: clamp(14px, 1.1vw, 16px); color: #94A3B8; margin-top: 8px; }
+
+/* 圖例顏色方塊與文字（發生數、破獲數、認識、不認識） */
+.legend { display: flex; gap: 16px; font-size: clamp(14px, 1.15vw, 17px); font-weight: 500; }
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; }
+.dot.blue { background: var(--accent-blue); }
+.dot.orange { background: var(--accent-orange); }
+.dot.red { background: var(--accent-red); }
+.dot.yellow { background: var(--accent-yellow); }
+.dot.gray { background: #64748B; }
+
+/* 圖表右上角的小徽章標籤（例如：事件驅動型尖峰、2024 年達 36.40%） */
+.badge-orange, .badge-red {
+  background: rgba(232, 111, 58, 0.2);
+  color: var(--accent-orange);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: clamp(13px, 1.1vw, 16px);
+}
+.badge-red { background: rgba(239, 68, 68, 0.2); color: #FCA5A5; }
+
+/* 圖表最底部的資料來源與降幅膠囊列 */
+.bottom-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: clamp(14px, 1.1vw, 16px);
+  color: var(--text-muted);
+}
+/* 降幅強調膠囊（例如：2015 → 2025 降幅達 -74.3%） */
+.stat-pill {
+  background: rgba(232, 111, 58, 0.18);
+  border: 1px solid var(--accent-orange);
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: clamp(14px, 1.2vw, 17px);
+}
+.stat-pill strong { color: var(--accent-orange); }
+
+/* ==================== 7. 分母效應、兩造關係、性別視角、結論頁 ==================== */
+/* 第 04 章：分母縮小效應卡片標題與數據列 */
+.math-card h3 { font-size: clamp(22px, 1.8vw, 27px); color: var(--accent-orange); margin-bottom: 14px; }
+.math-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-dark);
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: clamp(18px, 1.45vw, 22px);
+}
+.text-blue { color: #60A5FA; font-size: clamp(22px, 1.9vw, 28px); }
+.text-orange { color: var(--accent-orange); font-size: clamp(22px, 1.9vw, 28px); }
+.math-card p { font-size: clamp(18px, 1.45vw, 22px); color: var(--text-muted); line-height: 1.6; margin-top: 10px; }
+
+/* 第 05 章：79.17% 超大重點數字卡片 */
+.big-label { font-size: clamp(18px, 1.45vw, 22px); color: var(--text-muted); }
+.big-number { font-size: clamp(56px, 5vw, 72px); font-weight: 900; color: var(--accent-orange); line-height: 1.1; margin: 10px 0; }
+.big-stat-card p { font-size: clamp(18px, 1.45vw, 22px); color: var(--text-muted); line-height: 1.6; }
+
+/* 第 06 章：性別視角頂部標題＋右側切換按鈕列 */
+.header-with-toggle { display: flex; justify-content: space-between; align-items: flex-end; }
+.gender-switch {
+  background: var(--bg-card);
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  gap: 6px;
+}
+.switch-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 8px 18px;
+  border-radius: 7px;
+  font-size: clamp(15px, 1.25vw, 18px);
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+/* 選中女性或男性時的橘色按鈕狀態 */
+.switch-btn.active { background: var(--accent-orange); color: #fff; }
+
+/* 第 06 章：三欄網格（左關係圖 : 中地點圖 : 右側洞察框） */
+.gender-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.9fr;
+  gap: 18px;
+  flex: 1;
+  min-height: 0;
+}
+/* 第 06 章右側核心洞察卡片容器 */
+.insight-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-top: 4px solid var(--accent-orange);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+.insight-box h3 { font-size: clamp(22px, 1.8vw, 26px); color: var(--accent-orange); }
+/* 核心洞察內部的三條深色小卡片 */
+.insight-item { background: var(--bg-dark); padding: 14px 16px; border-radius: 8px; }
+.insight-item strong { display: block; font-size: clamp(18px, 1.5vw, 22px); color: #fff; margin-bottom: 6px; }
+.insight-item span { font-size: clamp(16px, 1.3vw, 20px); color: var(--text-muted); line-height: 1.55; }
+
+/* 第 07 章：壓軸結論四張並排卡片網格 */
+.conclusion-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  flex: 1;
+}
+/* 單張結論卡片（01～04） */
+.con-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+}
+/* 結論卡片頂部的橘色大編號（01、02、03、04） */
+.con-num {
+  font-size: clamp(34px, 2.8vw, 44px);
+  font-weight: 900;
+  color: var(--accent-orange);
+  margin-bottom: 12px;
+}
+/* 結論卡片標題與內文 */
+.con-card h3 { font-size: clamp(23px, 1.9vw, 28px); margin-bottom: 12px; }
+.con-card p { font-size: clamp(18px, 1.45vw, 22px); line-height: 1.65; color: var(--text-muted); }
+
+
+/* ==================== 8. 滑鼠懸停提示框 ==================== */
+.tooltip {
+position: fixed;
+background: rgba(10, 22, 34, 0.96);
+border: 1px solid var(--accent-orange);
+color: #fff;
+padding: 8px 12px;
+border-radius: 8px;
+font-size: 13px;
+pointer-events: none;
+opacity: 0;
+transition: opacity 0.12s;
+z-index: 2000;
+box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+/* ==================== 手機與平板響應式排版優化 ==================== */
+@media (max-width: 900px) {
+  html, body {
+    height: auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .deck {
+    height: auto;
+    min-height: calc(100vh - 64px);
+    overflow: visible;
+  }
+
+  .slide {
+    position: relative;
+    height: auto;
+    min-height: calc(100vh - 64px);
+    padding: 24px 18px 96px 18px;
+    overflow: visible;
+  }
+
+  .slide:not(.active) {
+    display: none;
+  }
+
+  /* 封面文字縮小與間距調整 */
+  .cover-layout h1 {
+    font-size: 2.6rem;
+    line-height: 1.18;
+  }
+  .cover-layout .subtitle {
+    font-size: 1.05rem;
+  }
+  .meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .accent-triangle {
+    display: none;
+  }
+
+  /* 標題區自動換行 */
+  .slide-header h2 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+  .slide-header p {
+    font-size: 0.92rem;
+  }
+  .header-with-toggle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  /* 所有雙欄、網格全部改為單欄上下排列 */
+  .toc-grid,
+  .two-col,
+  .ratio-layout,
+  .gender-grid,
+  .conclusion-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: auto;
+  }
+
+  /* 圖表容器給足舒適高度並允許橫向微調 */
+  .chart-panel {
+    padding: 14px;
+    min-height: 310px;
+  }
+  .chart-title-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.95rem;
+  }
+  .chart-box {
+    min-height: 240px;
+    height: 240px;
+  }
+  .bottom-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.8rem;
+  }
+
+  /* 數據大卡字體微調 */
+  .big-number {
+    font-size: 2.6rem;
+  }
+
+  /* 底部導覽列改成橫向可滑動，避免擠成一團 */
+  .nav-hud {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .nav-pills {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    max-width: 62vw;
+    padding-bottom: 2px;
+  }
+  .nav-pill {
+    font-size: 0.78rem;
+    padding: 5px 10px;
+    flex-shrink: 0;
+  }
+}
